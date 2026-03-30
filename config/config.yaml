@@ -66,5 +66,9 @@ eval:
 
 # ── Sequences ─────────────────────────────────────────────────────────────────
 sequences:
-  # List the sequences you download — update after Phase 2
-  selected: []
+  selected:
+    - "MOT17-02-SDP"
+    - "MOT17-04-SDP"
+    - "MOT17-05-SDP"
+    - "MOT17-09-SDP"
+    - "MOT17-10-SDP"  
