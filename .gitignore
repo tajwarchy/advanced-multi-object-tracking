@@ -1,0 +1,8 @@
+data/
+weights/
+outputs/
+__pycache__/
+*.pyc
+.DS_Store
+*.pt
+*.mp4
