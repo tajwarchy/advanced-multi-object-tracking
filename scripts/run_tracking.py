@@ -1,6 +1,6 @@
 import time
 from pathlib import Path
-
+from src.eval_formatter import EvalFormatter
 from src.data_loader import SequenceLoader, get_sequence_paths, load_config
 from src.detector import Detector
 from src.reporter import Reporter
@@ -19,6 +19,8 @@ def run_sequence(seq_path: Path, detector: Detector,
     tracker    = TrackerWrapper(cfg)
     visualizer = Visualizer(cfg)
     reporter   = Reporter(cfg, loader.name)
+    formatter = EvalFormatter(cfg, loader.name, seq_path)
+  
 
     # Determine frame size from first frame
     first_loader = SequenceLoader(seq_path, cfg)
@@ -43,12 +45,15 @@ def run_sequence(seq_path: Path, detector: Detector,
 
             elapsed_ms = (t1 - t0) * 1000
             reporter.update(trks, frame_id, len(dets), elapsed_ms)
+            formatter.update(trks, frame_id)
 
             if frame_id % 100 == 0:
                 print(f"    frame {frame_id:04d}/{len(loader)} "
                       f"| {elapsed_ms:.0f}ms")
 
     report_path = reporter.save()
+    fmt_path = formatter.save()
+    print(f"  MOT txt: {fmt_path}")
     print(f"  Report : {report_path}")
 
     # Return summary for final table
