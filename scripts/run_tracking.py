@@ -19,7 +19,8 @@ def run_sequence(seq_path: Path, detector: Detector,
     tracker    = TrackerWrapper(cfg)
     visualizer = Visualizer(cfg)
     reporter   = Reporter(cfg, loader.name)
-    formatter = EvalFormatter(cfg, loader.name, seq_path)
+    formatter = EvalFormatter(cfg, loader.name, seq_path,
+                          tracker_name="StrongSORT")
   
 
     # Determine frame size from first frame

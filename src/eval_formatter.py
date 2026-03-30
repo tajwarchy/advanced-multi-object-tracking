@@ -17,9 +17,11 @@ class EvalFormatter:
         frame, id, x, y, w, h, conf, -1, -1, -1
     """
 
-    def __init__(self, cfg: dict, seq_name: str, seq_path: Path):
+    def __init__(self, cfg: dict, seq_name: str, seq_path: Path,
+             tracker_name: str = "StrongSORT"):
+        
         tracker_dir = (Path(cfg["paths"]["eval_dir"])
-                       / "trackers" / "StrongSORT" / "data")
+                        / "trackers" / tracker_name / "data")
         tracker_dir.mkdir(parents=True, exist_ok=True)
         self._path = tracker_dir / f"{seq_name}.txt"
         self._rows: list[str] = []

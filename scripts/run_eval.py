@@ -5,11 +5,17 @@ from pathlib import Path
 import numpy as np
 import yaml
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--tracker", default="StrongSORT",
+                    choices=["StrongSORT", "ByteTrack"])
+args = parser.parse_args()
+tracker_name = args.tracker
 
 def load_config(config_path: str = "config/config.yaml") -> dict:
     with open(config_path) as f:
         return yaml.safe_load(f)
-
 
 def main():
     cfg       = load_config()
@@ -54,7 +60,7 @@ def main():
     "OUTPUT_FOLDER"      : str(results_dir),
     "BENCHMARK"          : "MOT17",
     "SPLIT_TO_EVAL"      : "train",
-    "TRACKERS_TO_EVAL"   : ["StrongSORT"],
+    "TRACKERS_TO_EVAL"   : [tracker_name],
     "CLASSES_TO_EVAL"    : ["pedestrian"],
     "PRINT_CONFIG"       : False,
     "OUTPUT_SUMMARY"     : True,
@@ -113,7 +119,7 @@ def main():
 
 def _print_results_table(results: dict, sequences: list, eval_dir: Path):
     try:
-        tracker_res = results["MotChallenge2DBox"]["StrongSORT"]
+        tracker_res = results["MotChallenge2DBox"][tracker_name]
     except KeyError:
         print("Could not parse results dict — check error log.")
         return
@@ -173,7 +179,7 @@ def _print_results_table(results: dict, sequences: list, eval_dir: Path):
     print(f"{'='*72}\n")
 
     # Save
-    out_path = eval_dir / "results" / "strongsort_results.txt"
+    out_path = eval_dir / "results" / f"{tracker_name.lower()}_results.txt"
     with open(out_path, "w") as f:
         f.write(f"{'Sequence':<22} {'HOTA':>7} {'MOTA':>7} {'MOTP':>7} "
                 f"{'IDF1':>7} {'IDSw':>6}\n")
